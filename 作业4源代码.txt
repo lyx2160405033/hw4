@@ -1,0 +1,92 @@
+源代码：
+1、空域低通滤波器：分别用高斯滤波器和中值滤波器去平滑测试图像test1和2，模板大小分别是3x3 ， 5x5 ，7x7； 利用固定方差 sigma=1.5产生高斯滤波器. 附件有产生高斯滤波器的方法；
+* 中值滤波器:
+```
+f1=imread('test2.tif');
+subplot(1,2,1);
+imshow(f1);
+title('原始图像');
+g1=medfilt2(f1,[3 3]);l
+subplot(1,2,2);
+imshow(g1);
+title('中值滤波3*3');
+g2=medfilt2(f1,[5 5]);
+figure(2);
+subplot(1,2,1);
+imshow(g2);
+title('中值滤波5*5');
+g3=medfilt2(f1,[7 7]);
+figure(2);
+subplot(1,2,2);
+imshow(g3);
+title('中值滤波7*7');
+```
+* 高斯滤波器：
+```
+f1=imread('test2.tif');
+subplot(1,2,1);
+imshow(f1);
+title('原始图像');
+h3=fspecial('gaussian',[3 3],1.5);
+h5=fspecial('gaussian',[5 5],1.5);
+h7=fspecial('gaussian',[7 7],1.5);
+g1=imfilter(f1,h3,'corr');
+subplot(1,2,2);
+imshow(g1);
+title('高斯滤波3*3');
+g2=imfilter(f1,h5,'corr');
+figure(2);
+subplot(1,2,1);
+imshow(g2);
+title('高斯滤波5*5');
+g3=imfilter(f1,h7,'corr');
+figure(2);
+subplot(1,2,2);
+imshow(g3);
+title('高斯滤波7*7');
+```
+3、利用高通滤波器滤波测试图像test3,4：包括unsharp masking, Sobel edge detector, and Laplace edge detection；Canny algorithm.
+* Unsharp Masking:
+```
+f1=imread('test4 copy.bmp');
+h1=fspecial('unsharp',0.2);
+g1=imfilter(f1,h1,'replicate');
+figure(1);
+subplot(1,2,1);
+imshow(f1);
+title('原始图像');
+subplot(1,2,2);
+imshow(g1);
+title('unsharp处理图像');
+```
+* Sobel & Canny
+```
+f=imread('test4 copy.bmp');
+figure;
+subplot(1,2,1);
+imshow(f);
+title('原图像');
+g=edge(f,'sobel');
+subplot(1,2,2);
+imshow(g);
+title('sobel边界检测');
+```
+* Laplace:
+```
+f1=imread('test4 copy.bmp');
+[n,m]=size(f1);
+figure;
+subplot(1,2,1);
+imshow(f1);
+title('原始图像');
+t=ones(n,m);
+t=f1;
+for i=2:n-1
+    for j=2:m-1
+        f1(i,j)=t(i+1,j)+t(i-1,j)+t(i,j+1)+t(i,j-1)-4*t(i,j);
+    end
+end
+subplot(1,2,2);
+imshow(f1);
+title('laplace边缘检测');
+```
